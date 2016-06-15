@@ -119,7 +119,7 @@ int constroi_matriz (int z[5][5]) {
 		"<html lang='pt-br'>\n"
 		"\n"
 		"	<head>\n"
-		"		<title>Logical Lights</title>\n"
+		"		<title>Luzes Logicas</title>\n"
 		"		<link rel='stylesheet' href='http://cap.dc.ufscar.br/~726568/Jogo-Luzes.css'>\n"
 		"	</head>\n"
 		"	\n"
