@@ -129,11 +129,11 @@ int constroi_matriz (int z[5][5]) {		// Função que constroi a matriz
 		
 		for (linhas=0; linhas<5; linhas++){     // Gera a string de 0 e 1 na url para informar ao client a situação da matriz
 			for (colunas=0; colunas<5;colunas++) {
-				strcat(parametros, z[linhas][colunas] ?  "1" : "0");	// If in line: caso z[
+				strcat(parametros, z[linhas][colunas] ?  "1" : "0");	// If in line: caso z[linhas][colunas] seja verdadeiro(1) então concatenamos "1", senão "0"
 			}
 		}
 		
-		for (linhas=0; linhas<5; linhas++){
+		for (linhas=0; linhas<5; linhas++){		// Gera o link na matriz e verifica o local clicado (temos um link para cada botão)
 			printf("<tr>\n");
 			for (colunas=0; colunas<5;colunas++) {
 				printf("<td class=\"%s\"> <a href='?linha=%d&coluna=%d&%s'></a></td>\n", z[linhas][colunas] ? "luz-acesa" : "luz-apagada", linhas, colunas, parametros);
@@ -166,26 +166,26 @@ int main () {
 	
 	char *parametros, matrizParametro[25];
 
-	parametros = getenv("QUERY_STRING");    // pega os parametros da URL
+	parametros = getenv("QUERY_STRING");    // Pega os parametros da URL
 	
 	int matriz[tamanho][tamanho];
 	int l, c, caux, laux, cont=0, tentativas=0, nivel;
 	
-	if(sscanf(parametros, "linha=%d&coluna=%d&matriz=%s", &l,&c, &matrizParametro) == 3) {
+	if(sscanf(parametros, "linha=%d&coluna=%d&matriz=%s", &l,&c, &matrizParametro) == 3) {		// Lê a URL e checa as variáveis, atribuindo nos parâmetros
 		int i = 0;
-		for (laux = 0; laux < 5; laux++) {
+		for (laux = 0; laux < 5; laux++) {		// Pega da URL os 0 e 1 e converte na nossa matriz, salvando o status do jogo 
 			for (caux = 0; caux < 5; caux++) {
 				matriz[laux][caux] = matrizParametro[i] == '1' ? 1 : 0;
 				i++;
 			}
 		}
 		
-		toggle (l, c, matriz);
-		constroi_matriz (matriz);
+		toggle (l, c, matriz);		// Chama a função toggle, que acende ou apaga
+		constroi_matriz (matriz);	// Chama a função que constroi a matriz
 		
 	} else if(sscanf(parametros, "nivel=%d", &nivel) >= 0) {
 		
-		// Povoando a matriz com 1
+		// Povoando a matriz com 1 (aceso)
 		
 		for (c=0; c < tamanho; c++) {
 			for (l=0; l < tamanho; l++) {
