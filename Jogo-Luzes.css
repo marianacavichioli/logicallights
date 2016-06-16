@@ -1,7 +1,7 @@
 @import url(https://fonts.googleapis.com/css?family=Roboto+Condensed);
 
 .luz-acesa{
-	background-color: yellow;
+	background-color: #dd99c7;
 }
 .luz-apagada{
 	background-color: gray;
@@ -26,14 +26,43 @@ a:link {
 }
 
 a.menu {
-	text-align: center;
 	display: inline-block;
+	text-align: center;
 	border: 2px solid black;
+	margin: 5px;
 	width: 100px;
 	height: 100px;
     padding: 10px;
 	font-size: 200%;
+	border-radius: initial;
+    color: #101a35;
+	font-size: 200%;
+    background-color: #6e70b8;
 }
+
 body {
+	margin-top: 200px;
 	font-family: Roboto Condensed;
+	text-align: center;
+    color: #dd99c7;
+}
+
+html {
+	
+    background-color: #101a35;
+    background-size: cover;
+    background-image: url("http://i.imgur.com/ZyhurQY.jpg");	
+    background-repeat: no-repeat;
+	height: 100%;
+}
+table {
+	
+    text-align: center;
+    display: inline;
+}
+
+p.subtitulo {
+	font-size: 200%;
+	font-family: Roboto Condensed;
+	text-align: center;
 }

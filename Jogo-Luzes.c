@@ -8,27 +8,25 @@
 
 // Função para trocar luzes acesas para apagadas e vice-versa
 
-int toggle (int x, int y, int z[5][5]) {  // x=l, y=c, z = matriz[l][c]
-
-	int tentativa=0;
+int toggle (int x, int y, int z[5][5]) {  // x = linha, y = coluna, z = matriz[l][c]
 	
 	if (x==0 && y==0){
-		z[x][y] = !z[x][y];			// canto superior esquerdo
+		z[x][y] = !z[x][y];			// Canto superior esquerdo
 		z[x][y+1] = !z[x][y+1];
 		z[x+1][y] = !z[x+1][y];
 	}
 	if (x==0 && y==4){
-		z[x][y] = !z[x][y];			// canto superior direito
+		z[x][y] = !z[x][y];			// Canto superior direito
 		z[x+1][y] = !z[x+1][y];
 		z[x][y-1] = !z[x][y-1];
 	}
 	if (x==4 && y==0){
-		z[x][y] = !z[x][y];			// canto inferior esquerdo
+		z[x][y] = !z[x][y];			// Canto inferior esquerdo
 		z[x][y+1] = !z[x][y+1];
 		z[x-1][y] = !z[x-1][y];
 	}
 	if (x==4 && y==4){
-		z[x][y] = !z[x][y];			// canto inferior direito
+		z[x][y] = !z[x][y];			// Canto inferior direito
 		z[x][y-1] = !z[x][y-1];
 		z[x-1][y] = !z[x-1][y];
 	}
@@ -40,7 +38,7 @@ int toggle (int x, int y, int z[5][5]) {  // x=l, y=c, z = matriz[l][c]
 		z[x-1][y] = !z[x-1][y];
 		z[x][y-1] = !z[x][y-1];		
 	}	
-	if ((x==0) && (y >= 1 && y <= 3)){		//linhas laterais
+	if ((x==0) && (y >= 1 && y <= 3)){		//Linhas laterais
         z[x][y] = !z[x][y];
         z[x][y-1] = !z[x][y-1];
         z[x][y+1] = !z[x][y+1];
@@ -69,9 +67,9 @@ int toggle (int x, int y, int z[5][5]) {  // x=l, y=c, z = matriz[l][c]
     }	
 }
 
-//Função de verificação caso todas as luzes estejam acesas
+//Função de verificação caso todas as luzes estejam apagadas
 
-int ganhou (int z[5][5]) {
+int ganhou (int z[5][5]) {  // Passagem de parâmetro da situação da matriz
 	
 	int *p;
 	
@@ -84,7 +82,35 @@ int ganhou (int z[5][5]) {
 	return TRUE;
 }
 
-void constroi_menu (){
+void constroi_menu (){		//Função do menu de opções
+	
+	printf("<!DOCTYPE html>\n"
+		"<html lang='pt-br'>\n"
+		"\n"
+		"	<head>\n"
+		"		<title>Logical Lights</title>\n"
+		"		<link rel='stylesheet' href='http://cap.dc.ufscar.br/~726568/Jogo-Luzes.css'>\n"	// Link do arquivo css 
+		"	</head>\n"
+		"	\n"
+		"	<body background: url(cap.jpg) >\n"
+		"		<table>\n");
+		
+		printf("<p class= 'subtitulo'>""Apague as luzes</p>");
+		printf("<br>");
+		printf("<br>");
+		
+		printf("<a class='menu' href= ?nivel=1>Easy</a>");		// Link das escolhas dos quatro níveis
+		printf("<br>");
+		printf("<a class='menu' href= ?nivel=2>Medium</a>");
+		printf("<br>");
+		printf("<a class='menu' href= ?nivel=3>Hard</a>");
+		printf("<br>");
+		printf("<a class='menu' href= ?nivel=4>Super Hard</a>");
+		printf("<br>");
+		
+}
+
+int constroi_matriz (int z[5][5]) {		// Função que constroi a matriz
 	
 	printf("<!DOCTYPE html>\n"
 		"<html lang='pt-br'>\n"
@@ -94,45 +120,16 @@ void constroi_menu (){
 		"		<link rel='stylesheet' href='http://cap.dc.ufscar.br/~726568/Jogo-Luzes.css'>\n"
 		"	</head>\n"
 		"	\n"
-		"	<body>\n"
-		"		<table>\n");
-		
-		printf("<h1 style= ""text-align:center;>""Logical Lights</h1>");
-		printf("<br>");
-		
-		printf("<a class='menu' href= ?nivel=1>Easy</a>");
-		printf("<br>");
-		printf("<a class='menu' href= ?nivel=2>Medium</a>");
-		printf("<br>");
-		printf("<a class='menu' href= ?nivel=3>Hard</a>");
-		printf("<br>");
-		printf("<a class='menu' href= ?nivel=4>Super Hard</a>");
-		printf("<br>");
-		
-		
-	
-}
-
-int constroi_matriz (int z[5][5]) {
-	
-	printf("<!DOCTYPE html>\n"
-		"<html lang='pt-br'>\n"
-		"\n"
-		"	<head>\n"
-		"		<title>Luzes Logicas</title>\n"
-		"		<link rel='stylesheet' href='http://cap.dc.ufscar.br/~726568/Jogo-Luzes.css'>\n"
-		"	</head>\n"
-		"	\n"
-		"	<body>\n"
-		"		<table style=""text-align:center;"">\n");
+		"	<body background: ""cap.jpg"" bgproperties=""fixed""; >\n"
+		"		<table align: ""center"">\n");
 		int linhas, colunas;
 		
 		char parametros[50];
 		strcpy(parametros, "matriz=");
 		
-		for (linhas=0; linhas<5; linhas++){     //gera a string de 0 e 1 na url para informar ao client a situação da matriz
+		for (linhas=0; linhas<5; linhas++){     // Gera a string de 0 e 1 na url para informar ao client a situação da matriz
 			for (colunas=0; colunas<5;colunas++) {
-				strcat(parametros, z[linhas][colunas] ?  "1" : "0");
+				strcat(parametros, z[linhas][colunas] ?  "1" : "0");	// If in line: caso z[
 			}
 		}
 		
@@ -140,6 +137,7 @@ int constroi_matriz (int z[5][5]) {
 			printf("<tr>\n");
 			for (colunas=0; colunas<5;colunas++) {
 				printf("<td class=\"%s\"> <a href='?linha=%d&coluna=%d&%s'></a></td>\n", z[linhas][colunas] ? "luz-acesa" : "luz-apagada", linhas, colunas, parametros);
+			// Se o botão atual for igual a 1 (verdadeiro) é luz acesa, senão é luz apagada
 			}
 			printf("</tr>\n");
 		}
