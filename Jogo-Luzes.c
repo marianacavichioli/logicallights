@@ -110,7 +110,7 @@ void constroi_menu (){		//Função do menu de opções
 		
 }
 
-int constroi_matriz (int z[5][5]) {		// Função que constroi a matriz
+int constroi_matriz (int z[5][5], int nivel) {		// Função que constroi a matriz
 	
 	printf("<!DOCTYPE html>\n"
 		"<html lang='pt-br'>\n"
@@ -119,9 +119,10 @@ int constroi_matriz (int z[5][5]) {		// Função que constroi a matriz
 		"		<title>Logical Lights</title>\n"
 		"		<link rel='stylesheet' href='http://cap.dc.ufscar.br/~726568/Jogo-Luzes.css'>\n"
 		"	</head>\n"
-		"	\n"
 		"	<body background: ""cap.jpg"" bgproperties=""fixed""; >\n"
-		"		<table align: ""center"">\n");
+		"		<strong><a href=\"?nivel=0\">MENU</a></strong> <strong><a href=\"?nivel=%d\">PROXIMO NÍVEL</a></strong>"
+		"		<table align: ""center"">\n", nivel+1);
+		
 		int linhas, colunas;
 		
 		char parametros[50];
@@ -156,7 +157,10 @@ void resultado () {
 		"	<body>\n"
 		"		<h1 style=""text-align:center;"">Parabéns, você ganhou!</h1>\n"
 		"	</body>");
+		
+		//voltar();
 }
+
 
 int main () {
 	
@@ -169,7 +173,7 @@ int main () {
 	parametros = getenv("QUERY_STRING");    // Pega os parametros da URL
 	
 	int matriz[tamanho][tamanho];
-	int l, c, caux, laux, cont=0, tentativas=0, nivel;
+	int l, c, caux, laux, cont=0, tentativas=0, nivel, voltar, proximo;
 	
 	if(sscanf(parametros, "linha=%d&coluna=%d&matriz=%s", &l,&c, &matrizParametro) == 3) {		// Lê a URL e checa as variáveis, atribuindo nos parâmetros
 		int i = 0;
@@ -181,7 +185,7 @@ int main () {
 		}
 		
 		toggle (l, c, matriz);		// Chama a função toggle, que acende ou apaga
-		constroi_matriz (matriz);	// Chama a função que constroi a matriz
+		constroi_matriz (matriz, nivel);	// Chama a função que constroi a matriz
 		
 	} else if(sscanf(parametros, "nivel=%d", &nivel) >= 0) {
 		
@@ -191,6 +195,10 @@ int main () {
 			for (l=0; l < tamanho; l++) {
 				matriz[l][c] = 1;
 			}
+		}
+		
+		if (nivel==0) {
+			constroi_menu();
 		}
 		
 		if (nivel==1) {			// Nível Fácil
@@ -205,6 +213,8 @@ int main () {
 			matriz[3][3] = 0;
 			matriz[4][1] = 0;
 			matriz[4][3] = 0;
+			
+			constroi_matriz (matriz, nivel);
 		}
 		
 		if (nivel==2) {			// Nível Médio
@@ -222,6 +232,8 @@ int main () {
 			matriz[4][2] = 0;
 			matriz[4][3] = 0;
 			matriz[4][4] = 0;
+			
+			constroi_matriz (matriz, nivel);
 		}
 		
 		if (nivel==3){			// Nivel Difícil
@@ -237,6 +249,8 @@ int main () {
 			matriz[3][1] = 0;
 			matriz[3][3] = 0;
 			matriz[3][4] = 0;
+			
+			constroi_matriz (matriz, nivel);
 		}
 		
 		if (nivel==4) {
@@ -251,9 +265,9 @@ int main () {
 					cont ++;	
 				}
 			}
+			constroi_matriz (matriz, nivel);
 		}
-		
-		constroi_matriz (matriz);
+	
 	}
 	
 	else {
@@ -264,6 +278,7 @@ int main () {
 		
 		resultado();
 	}
+	
 	
 	return 0;
 }
