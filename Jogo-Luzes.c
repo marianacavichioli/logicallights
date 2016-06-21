@@ -120,7 +120,7 @@ int constroi_matriz (int z[5][5], int nivel) {		// Função que constroi a matriz
 		"		<link rel='stylesheet' href='http://cap.dc.ufscar.br/~726568/Jogo-Luzes.css'>\n"
 		"	</head>\n"
 		"	<body background: ""cap.jpg"" bgproperties=""fixed""; >\n"
-		"		<strong><a href=\"?nivel=0\">MENU</a></strong> <strong><a href=\"?nivel=%d\">PROXIMO NÍVEL</a></strong>"
+		"		<strong><a class='opcoes' href=\"?nivel=0\">MENU</a></strong> <strong><a class = 'opcoes' href=\"?nivel=%d\">PROXIMO NiVEL</a></strong> <br><br>"
 		"		<table align: ""center"">\n", nivel+1);
 		
 		int linhas, colunas;
@@ -155,10 +155,10 @@ void resultado () {
 		"	</head>\n"
 		"	\n"
 		"	<body>\n"
-		"		<h1 style=""text-align:center;"">Parabéns, você ganhou!</h1>\n"
+		"		<h1 style=""text-align:center;"">Parabens, voce ganhou!</h1>\n"
 		"	</body>");
 		
-		//voltar();
+
 }
 
 
@@ -197,7 +197,7 @@ int main () {
 			}
 		}
 		
-		if (nivel==0) {
+		if (nivel==0 || nivel>4) {
 			constroi_menu();
 		}
 		
