@@ -35,10 +35,14 @@ a.menu {
 	height: 83px;
     	padding: 10px;
 	font-size: 200%;
-	border-radius: initial;
+	border-radius: 30%;
     	color: #101a35;
 	font-size: 200%;
     	background-color: #6e70b8;
+}
+
+a.fim {
+	text-align:center;
 }
 
 body {
@@ -71,3 +75,8 @@ p.subtitulo {
 a.opcoes {
 	font-size: 120%;
 }
+
+
+
+
+

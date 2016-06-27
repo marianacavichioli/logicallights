@@ -110,6 +110,62 @@ void constroi_menu (){		//Função do menu de opções
 		
 }
 
+int carrega_matriz (int z[5][5], int nivel) {
+	
+	char nome_arquivo[256];
+	
+	if (nivel==1) {
+		
+		strcpy(nome_arquivo, "/home/bcc/726568/public_html/facil.julia");
+	}
+	
+	else if (nivel == 2) {
+		strcpy(nome_arquivo, "/home/bcc/726568/public_html/medio.julia");
+	}
+	
+	else if (nivel == 3) {
+		strcpy(nome_arquivo, "/home/bcc/726568/public_html/dificil.julia");
+	}
+
+	FILE *pArquivo = fopen (nome_arquivo, "rb");
+	
+	fread (z, sizeof(int), 25, pArquivo);
+	
+	fclose(pArquivo);
+	
+	printf("<!DOCTYPE html>\n"
+		"<html lang='pt-br'>\n"
+		"\n"
+		"	<head>\n"
+		"		<title>Logical Lights</title>\n"
+		"		<link rel='stylesheet' href='http://cap.dc.ufscar.br/~726568/Jogo-Luzes.css'>\n"
+		"	</head>\n"
+		"	<body background: ""cap.jpg"" bgproperties=""fixed""; >\n"
+		"		<strong><a class='opcoes' href=\"?nivel=0\">MENU</a></strong> <strong><a class = 'opcoes' href=\"?nivel=%d\">PROXIMO NiVEL</a></strong> <br><br>"
+		"		<table align: ""center"">\n", nivel+1);
+	
+	int linhas, colunas;
+	
+	char parametros[50];
+	strcpy(parametros, "matriz=");
+	
+	for (linhas=0; linhas<5; linhas++){     // Gera a string de 0 e 1 na url para informar ao client a situação da matriz
+		for (colunas=0; colunas<5;colunas++) {
+			strcat(parametros, z[linhas][colunas] ?  "1" : "0");	// If in line: caso z[linhas][colunas] seja verdadeiro(1) então concatenamos "1", senão "0"
+		}
+	}
+	
+	for (linhas=0; linhas<5; linhas++){		// Gera o link na matriz e verifica o local clicado (temos um link para cada botão)
+		printf("<tr>\n");
+		for (colunas=0; colunas<5;colunas++) {
+			printf("<td class=\"%s\"> <a href='?linha=%d&coluna=%d&nivel=%d&%s'></a></td>\n", z[linhas][colunas] ? "luz-acesa" : "luz-apagada", linhas, colunas, nivel, parametros);
+		// Se o botão atual for igual a 1 (verdadeiro) é luz acesa, senão é luz apagada
+		}
+		printf("</tr>\n");
+	}
+
+}
+
 int constroi_matriz (int z[5][5], int nivel) {		// Função que constroi a matriz
 	
 	printf("<!DOCTYPE html>\n"
@@ -137,14 +193,19 @@ int constroi_matriz (int z[5][5], int nivel) {		// Função que constroi a matriz
 		for (linhas=0; linhas<5; linhas++){		// Gera o link na matriz e verifica o local clicado (temos um link para cada botão)
 			printf("<tr>\n");
 			for (colunas=0; colunas<5;colunas++) {
-				printf("<td class=\"%s\"> <a href='?linha=%d&coluna=%d&%s'></a></td>\n", z[linhas][colunas] ? "luz-acesa" : "luz-apagada", linhas, colunas, parametros);
+				printf("<td class=\"%s\"> <a href='?linha=%d&coluna=%d&nivel=%d&%s'></a></td>\n", z[linhas][colunas] ? "luz-acesa" : "luz-apagada", linhas, colunas, nivel, parametros);
 			// Se o botão atual for igual a 1 (verdadeiro) é luz acesa, senão é luz apagada
 			}
 			printf("</tr>\n");
 		}
+		
+		FILE *pArquivo = fopen ("facil.julia", "w");
+		fwrite (z,sizeof(int), 25, pArquivo);
+		
+		fclose (pArquivo);
 }
 
-void resultado () {
+void resultado (int nivel) {
 	
 	printf("<!DOCTYPE html>\n"
 		"<html lang='pt-br'>\n"
@@ -155,8 +216,9 @@ void resultado () {
 		"	</head>\n"
 		"	\n"
 		"	<body>\n"
-		"		<h1 style=""text-align:center;"">Parabens, voce ganhou!</h1>\n"
-		"	</body>");
+		"		<h1>Parabens, voce ganhou!</h1>\n"
+		"		<a href= '?nivel=%d'></a>"
+		"	</body>", nivel);
 		
 
 }
@@ -171,11 +233,13 @@ int main () {
 	char *parametros, matrizParametro[25];
 
 	parametros = getenv("QUERY_STRING");    // Pega os parametros da URL
+	//parametros = (char*) malloc(256);
+	//strcpy(parametros, "nivel=1");
 	
 	int matriz[tamanho][tamanho];
 	int l, c, caux, laux, cont=0, tentativas=0, nivel, voltar, proximo;
 	
-	if(sscanf(parametros, "linha=%d&coluna=%d&matriz=%s", &l,&c, &matrizParametro) == 3) {		// Lê a URL e checa as variáveis, atribuindo nos parâmetros
+	if(sscanf(parametros, "linha=%d&coluna=%d&nivel=%d&matriz=%s", &l,&c, &nivel, &matrizParametro) == 4) {		// Lê a URL e checa as variáveis, atribuindo nos parâmetros
 		int i = 0;
 		for (laux = 0; laux < 5; laux++) {		// Pega da URL os 0 e 1 e converte na nossa matriz, salvando o status do jogo 
 			for (caux = 0; caux < 5; caux++) {
@@ -188,7 +252,7 @@ int main () {
 		constroi_matriz (matriz, nivel);	// Chama a função que constroi a matriz
 		
 	} else if(sscanf(parametros, "nivel=%d", &nivel) >= 0) {
-		
+	
 		// Povoando a matriz com 1 (aceso)
 		
 		for (c=0; c < tamanho; c++) {
@@ -214,7 +278,7 @@ int main () {
 			matriz[4][1] = 0;
 			matriz[4][3] = 0;
 			
-			constroi_matriz (matriz, nivel);
+			carrega_matriz (matriz, nivel);
 		}
 		
 		if (nivel==2) {			// Nível Médio
@@ -233,7 +297,7 @@ int main () {
 			matriz[4][3] = 0;
 			matriz[4][4] = 0;
 			
-			constroi_matriz (matriz, nivel);
+			carrega_matriz (matriz, nivel);
 		}
 		
 		if (nivel==3){			// Nivel Difícil
@@ -250,7 +314,7 @@ int main () {
 			matriz[3][3] = 0;
 			matriz[3][4] = 0;
 			
-			constroi_matriz (matriz, nivel);
+			carrega_matriz (matriz, nivel);
 		}
 		
 		if (nivel==4) {
@@ -276,7 +340,8 @@ int main () {
 	
 	if(ganhou(matriz)==TRUE){
 		
-		resultado();
+		sscanf(parametros, "nivel=%d", &nivel) >= 0;
+		resultado(nivel);
 	}
 	
 	
